@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html style = "height: 100%; width: 100%; overflow: hidden;">
+    <head>
+        <meta charset="utf-8"></meta>
+        <div style = "display: none;">
+            <img src = "favicon.ico">
+                [)=(]
+            </img> <!-- Je suis vraiment nul en ASCII art ! -->
+            <h1>MathRace</h1>
+        </div>
+        <style>
+            canvas {
+                position: fixed;
+                top: 0;
+                left: 0;
+                margin: 0;
+                padding: 0;
+                image-rendering: -moz-crisp-edges;
+                image-rendering: pixelated;
+            }
+        </style>
+    </head>
+    <body style = "height: 100%; width: 100%;">
+        <!-- <div id = "game" style = "height: 100%; width: 100%;"> -->
+        <canvas id = "canvas" width = "64" height = "48">
+            MathRace game
+        </canvas>
+        <!-- </div> -->
+        <script>
+            /* Let the canvas fill the page */
+            function fill(){
+                if(window.innerWidth<window.innerHeight){
+                    document.getElementById("canvas").style.width = "132vw";
+                    document.getElementById("canvas").style.height = "99vw";
+                }else{
+                    document.getElementById("canvas").style.width = "132vh";
+                    document.getElementById("canvas").style.height = "99vh";
+                }
+            }
+            fill();
+            window.onresize = fill;
+            /* Configure the WASM module */
+            var Module = {
+                preRun: [],
+                postRun: [],
+                print: (function() {
+                    return function(text) {
+                        console.log(text);
+                    }
+                })(),
+                canvas: (function() {
+                    var canvas = document.getElementById("canvas");
+                    return canvas;
+                })(),
+                setStatus: function(text) {
+                    console.log(text)
+                },
+                totalDependencies: 0,
+                monitorRunDependencies: function(left) {
+                this.totalDependencies = Math.max(this.totalDependencies, left);
+                Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+                }
+            };
+            Module.setStatus('Downloading...');
+            window.onerror = function(event) {
+                Module.setStatus('Exception thrown, see JavaScript console');
+                Module.setStatus = function(text) {
+                    if(text){
+                        Module.printErr('[post-exception status] ' + text);
+                    }
+                };
+            };
+        </script>
+        <script async type="text/javascript" src="MathRace.js"></script>
+    </body>
+</html>
