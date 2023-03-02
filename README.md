@@ -1,2 +1,3 @@
-# mathrace-wasm-build
-The latest build of MathRace wasm.
+# CalcRace-build
+
+The latest build of [CalcRace](https://github.com/mibi88/CalcRace).
